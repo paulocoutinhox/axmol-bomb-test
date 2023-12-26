@@ -10,15 +10,17 @@ Sprite *MainScene::createBomb()
     spriteFrameCache->addSpriteFramesWithFile("animation.plist", "bomb.png");
 
     // create sprites
-    Vector<SpriteFrame*> frames;
+    Vector<SpriteFrame *> frames;
     char frameName[100];
 
-    for(int i = 1; i <= 4; i++) {
+    for (int i = 1; i <= 4; i++)
+    {
         sprintf(frameName, "frame%d.png", i);
 
-        SpriteFrame* frame = spriteFrameCache->getSpriteFrameByName(frameName);
+        SpriteFrame *frame = spriteFrameCache->getSpriteFrameByName(frameName);
 
-        if(frame) {
+        if (frame)
+        {
             frames.pushBack(frame);
         }
     }
