@@ -1,39 +1,49 @@
 #include "MainScene.h"
+#include <string>
 
 USING_NS_AX;
 
 Sprite *MainScene::createBomb()
 {
-    // create frames
-    Vector<SpriteFrame *> animFrames;
-    auto numFrames = 4;
-    animFrames.reserve(numFrames);
+    // create animation
+    auto spriteFrameCache = SpriteFrameCache::getInstance();
+    spriteFrameCache->addSpriteFramesWithFile("animation.plist", "bomb.png");
 
-    auto texture = Director::getInstance()->getTextureCache()->addImage("bomb.png");
+    // create sprites
+    Vector<SpriteFrame*> frames;
+    char frameName[100];
 
-    for (int i = 1; i < numFrames; i++)
-    {
-        auto frame = SpriteFrame::createWithTexture(texture, Rect(i * 78, 0, 78, 64));
-        animFrames.pushBack(frame);
+    for(int i = 1; i <= 4; i++) {
+        sprintf(frameName, "frame%d.png", i);
+
+        SpriteFrame* frame = spriteFrameCache->getSpriteFrameByName(frameName);
+
+        if(frame) {
+            frames.pushBack(frame);
+        }
     }
 
-    Sprite *bomb = Sprite::createWithSpriteFrame(animFrames.front());
+    // create animation
+    auto animation = Animation::createWithSpriteFrames(frames, 0.1f);
+    auto animate = Animate::create(animation);
+
+    auto bomb = Sprite::create();
+    bomb->runAction(RepeatForever::create(animate));
 
     bomb->setName("shoot");
     bomb->setContentSize(Vec2(78, 64));
-    bomb->setScale(0.5f);
 
-    // create frame animation
-    auto animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
-    auto animate = Animate::create(animation);
-    bomb->runAction(RepeatForever::create(animate));
+    // setup the physical body
+    auto physicsBody = PhysicsBody::createCircle(bomb->getContentSize().width / 2, PhysicsMaterial(1.0f, 0.1f, 0.8f));
+    physicsBody->setMass(1.0f);
+    bomb->setPhysicsBody(physicsBody);
 
     return bomb;
 }
 
 bool MainScene::init()
 {
-    if (!Scene::init())
+    if (!Scene::initWithPhysics())
     {
         return false;
     }
