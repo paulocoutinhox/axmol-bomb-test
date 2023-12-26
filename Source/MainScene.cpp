@@ -50,6 +50,10 @@ bool MainScene::init()
         return false;
     }
 
+#if _AX_DEBUG
+    getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+#endif
+
     auto visibleSize = _director->getVisibleSize();
     auto origin = _director->getVisibleOrigin();
     auto safeArea = _director->getSafeAreaRect();
