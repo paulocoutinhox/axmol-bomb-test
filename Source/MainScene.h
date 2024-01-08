@@ -9,7 +9,7 @@ public:
     bool init() override;
 
 private:
-    ax::Sprite *createBomb();
+    ax::Sprite *createBomb(bool animated);
 };
 
 #endif // __MAIN_SCENE_H__

@@ -3,34 +3,42 @@
 
 USING_NS_AX;
 
-Sprite *MainScene::createBomb()
+Sprite *MainScene::createBomb(bool animated)
 {
-    // create animation
-    auto spriteFrameCache = SpriteFrameCache::getInstance();
-    spriteFrameCache->addSpriteFramesWithFile("animation.plist", "bomb.png");
-
-    // create sprites
-    Vector<SpriteFrame *> frames;
-    char frameName[100];
-
-    for (int i = 1; i <= 4; i++)
-    {
-        sprintf(frameName, "frame%d.png", i);
-
-        SpriteFrame *frame = spriteFrameCache->getSpriteFrameByName(frameName);
-
-        if (frame)
-        {
-            frames.pushBack(frame);
-        }
-    }
-
-    // create animation
-    auto animation = Animation::createWithSpriteFrames(frames, 0.1f);
-    auto animate = Animate::create(animation);
-
     auto bomb = Sprite::create();
-    bomb->runAction(RepeatForever::create(animate));
+
+    if (animated)
+    {
+        // create animation
+        auto spriteFrameCache = SpriteFrameCache::getInstance();
+        spriteFrameCache->addSpriteFramesWithFile("animation.plist", "bomb.png");
+
+        // create sprites
+        Vector<SpriteFrame *> frames;
+        char frameName[100];
+
+        for (int i = 1; i <= 4; i++)
+        {
+            sprintf(frameName, "frame%d.png", i);
+
+            SpriteFrame *frame = spriteFrameCache->getSpriteFrameByName(frameName);
+
+            if (frame)
+            {
+                frames.pushBack(frame);
+            }
+        }
+
+        // create animation
+        auto animation = Animation::createWithSpriteFrames(frames, 0.1f);
+        auto animate = Animate::create(animation);
+
+        bomb->runAction(RepeatForever::create(animate));
+    }
+    else
+    {
+        bomb->setTexture("bomb.png");
+    }
 
     bomb->setName("shoot");
     bomb->setContentSize(Vec2(78, 64));
@@ -59,10 +67,15 @@ bool MainScene::init()
     auto safeArea = _director->getSafeAreaRect();
     auto safeOrigin = safeArea.origin;
 
-    // create the bomb
-    auto bomb = createBomb();
-    bomb->setPosition(visibleSize.width / 2, visibleSize.height / 2);
-    addChild(bomb);
+    // create the bomb1 (animted)
+    auto bomb1 = createBomb(true);
+    bomb1->setPosition(visibleSize.width / 2 - 50, visibleSize.height / 2);
+    addChild(bomb1);
+
+    // create the bomb2 (not animted)
+    auto bomb2 = createBomb(false);
+    bomb2->setPosition(visibleSize.width / 2 + 50, visibleSize.height / 2);
+    addChild(bomb2);
 
     // scheduleUpdate() is required to ensure update(float) is called on every loop
     scheduleUpdate();
