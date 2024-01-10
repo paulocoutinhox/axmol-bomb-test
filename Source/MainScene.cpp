@@ -42,6 +42,7 @@ Sprite *MainScene::createBomb(bool animated)
 
     bomb->setName("shoot");
     bomb->setContentSize(Vec2(78, 64) / _director->getContentScaleFactor());
+    bomb->setScale(0.5);
 
     // setup the physical body
     auto physicsBody = PhysicsBody::createCircle(bomb->getContentSize().width / 2, PhysicsMaterial(1.0f, 0.1f, 0.8f));
