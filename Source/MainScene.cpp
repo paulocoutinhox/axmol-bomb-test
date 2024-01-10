@@ -6,7 +6,7 @@ USING_NS_AX;
 Sprite *MainScene::createBomb(bool animated)
 {
     auto bomb = Sprite::create();
-    
+
     if (animated)
     {
         // create animation
